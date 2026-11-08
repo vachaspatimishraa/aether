@@ -1,8 +1,8 @@
-# Privacy Policy for AetherCalc Pro
+# Privacy Policy for AetherCalc Pro — An Elvyntra Product
 
 **Last Updated:** November 8, 2026
 
-AetherCalc Pro ("the Application") is an offline-first, precision scientific, graphing, programmer, and analytical calculator developed by AetherLab ("we", "us", or "our"). We are committed to protecting your privacy. This Privacy Policy explains how information is handled within the Application.
+AetherCalc Pro ("the Application") is an offline-first, precision scientific, graphing, programmer, and analytical calculator engineered by Elvyntra ("we", "us", or "our"). We are committed to protecting your privacy. This Privacy Policy explains how information is handled within the Application.
 
 ---
 
@@ -35,6 +35,7 @@ Because AetherCalc Pro does not collect any personal data whatsoever, it is full
 
 ### 5. Contact Us
 If you have any questions or feedback regarding this Privacy Policy or AetherCalc Pro, please contact:
-- **Developer Support:** `support@aethercalc.pro`
-- **Developer Organization:** AetherLab
+- **Developer Organization:** Elvyntra
+- **Support Email:** `support@elvyntra.com`
+- **Official Website:** `https://elvyntra.com`
 

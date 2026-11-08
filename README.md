@@ -5,11 +5,13 @@
 </p>
 
 <p align="center">
-  <strong>Enterprise-Grade Scientific, Graphing, Programmer & Matrix Analytical Calculator</strong><br>
-  <em>Engineered for Scientists, Researchers, Financial Analysts, and Systems Engineers.</em>
+  <strong>An Elvyntra Product</strong><br>
+  <em>Enterprise-Grade Scientific, Graphing, Programmer & Matrix Analytical Calculator</em><br>
+  Engineered by <strong>Elvyntra</strong> for Scientists, Researchers, Financial Analysts, and Systems Engineers.
 </p>
 
 <p align="center">
+  <img src="https://img.shields.io/badge/Company-Elvyntra-FBBF24?style=for-the-badge&logoColor=black" alt="Elvyntra" />
   <img src="https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white" alt="Flutter" />
   <img src="https://img.shields.io/badge/Dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white" alt="Dart" />
   <img src="https://img.shields.io/badge/Android%2015-Target%20SDK%2035-00E599?style=for-the-badge&logo=android&logoColor=black" alt="Android 15" />
@@ -21,7 +23,7 @@
 
 ## 🌟 Overview & Product Philosophy
 
-**AetherCalc Pro** (`com.aethercalc.pro`) is an enterprise-class, multiplatform scientific calculator engineered without compromise. It combines laboratory-grade computational precision across 8 specialized mathematical engines with a luxury, high-contrast dark/light design system powered by 60 FPS spring physics and drifting mathematical glyph particles.
+**AetherCalc Pro** (`com.aethercalc.pro`) is a flagship computational product engineered by **Elvyntra**. It combines laboratory-grade computational precision across 8 specialized mathematical engines with a luxury, high-contrast dark/light design system powered by 60 FPS spring physics and drifting mathematical glyph particles.
 
 ### Strict Palette Architectural Rule
 AetherCalc Pro enforces an uncompromising design rule: **strictly zero blue, zero red, and zero magenta tones anywhere in the software**.

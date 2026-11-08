@@ -186,6 +186,33 @@ class _MainCalculatorHomeState extends State<MainCalculatorHome>
           ),
           const SizedBox(height: 14),
 
+          // Elvyntra Company Branding Badge
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+            decoration: BoxDecoration(
+              color: LuxuryTheme.goldSubtle,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: LuxuryTheme.goldWarm.withOpacity(0.6), width: 1.0),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.workspace_premium_outlined, size: 14, color: LuxuryTheme.goldPrimary),
+                const SizedBox(width: 6),
+                Text(
+                  'AN ELVYNTRA PRODUCT',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.2,
+                    color: LuxuryTheme.goldPrimary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 14),
+
           Text(
             'AETHERCALC PRO',
             style: TextStyle(
@@ -197,7 +224,7 @@ class _MainCalculatorHomeState extends State<MainCalculatorHome>
           ),
           const SizedBox(height: 4),
           Text(
-            'Version 1.0.0 Enterprise • com.aethercalc.pro',
+            'Version 1.0.0 Enterprise • Engineered by Elvyntra',
             style: TextStyle(
               fontSize: 12,
               color: LuxuryTheme.emeraldBright,
@@ -228,7 +255,16 @@ class _MainCalculatorHomeState extends State<MainCalculatorHome>
               _buildAboutBadge('60 FPS PHYSICS', Icons.speed, LuxuryTheme.ochreWarm),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
+          Text(
+            'Copyright © 2026 Elvyntra. All rights reserved.',
+            style: TextStyle(
+              fontSize: 10,
+              color: LuxuryTheme.textSubtle,
+              letterSpacing: 0.5,
+            ),
+          ),
+          const SizedBox(height: 14),
 
           // Close button
           SizedBox(
@@ -399,13 +435,26 @@ class _MainCalculatorHomeState extends State<MainCalculatorHome>
                         ),
                       ],
                     ),
-                    Text(
-                      'Precision Analytical Engine',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: LuxuryTheme.textMuted,
-                        letterSpacing: 0.4,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          'ELVYNTRA',
+                          style: TextStyle(
+                            fontSize: 9,
+                            fontWeight: FontWeight.w800,
+                            color: LuxuryTheme.goldWarm,
+                            letterSpacing: 0.8,
+                          ),
+                        ),
+                        Text(
+                          ' • Analytical Engine',
+                          style: TextStyle(
+                            fontSize: 9,
+                            color: LuxuryTheme.textMuted,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

@@ -14,9 +14,9 @@ Use this reference to complete your Google Play Console store listing for **Aeth
 
 - **Full Description (Max 4,000 chars):**
 ```text
-AetherCalc Pro is an enterprise-grade scientific, analytical, and graphing calculator engineered for engineers, scientists, researchers, financial analysts, and programmers who demand uncompromising precision and luxury design.
+AetherCalc Pro is an enterprise-grade scientific, analytical, and graphing calculator engineered by Elvyntra for engineers, scientists, researchers, financial analysts, and programmers who demand uncompromising precision and luxury design.
 
-Built with an ultra-responsive 60 FPS animation framework and spring physics, AetherCalc Pro combines laboratory-grade mathematical capabilities with an obsidian carbon and emerald analytical theme that is 100% compliant with high-contrast, distraction-free visual standards.
+An Elvyntra Product, built with an ultra-responsive 60 FPS animation framework and spring physics, AetherCalc Pro combines laboratory-grade mathematical capabilities with an obsidian carbon and emerald analytical theme that is 100% compliant with high-contrast, distraction-free visual standards.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 8 SPECIALIZED COMPUTATIONAL ENGINES
@@ -91,6 +91,8 @@ KEYBOARD & LUXURY INTERFACE
 
 | Field | Value |
 | :--- | :--- |
+| **Developer Name** | **Elvyntra** |
+| **Support Email** | `support@elvyntra.com` |
 | **Package Name** | `com.aethercalc.pro` |
 | **Category** | Tools / Education |
 | **Tags** | Calculator, Scientific Calculator, Graphing, Matrix, Math, Finance |

@@ -57,7 +57,8 @@ void main() {
     await tester.pump(const Duration(milliseconds: 300));
 
     expect(find.text('AETHERCALC PRO'), findsOneWidget);
-    expect(find.text('Version 1.0.0 Enterprise • com.aethercalc.pro'), findsOneWidget);
+    expect(find.text('AN ELVYNTRA PRODUCT'), findsOneWidget);
+    expect(find.text('Version 1.0.0 Enterprise • Engineered by Elvyntra'), findsOneWidget);
 
     // Dismiss bottom sheet via Navigator pop
     final modalContext = tester.element(find.text('AETHERCALC PRO'));
