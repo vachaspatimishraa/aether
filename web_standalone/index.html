@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>AetherCalc Pro • Ultra Scientific Engine</title>
+  <meta name="theme-color" content="#090D0B">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* STRICT COLOR PALETTE: Obsidian Carbon, Cyber Emerald, Champagne Gold, Warm Ochre.
+       ZERO BLUE, ZERO RED, ZERO MAGENTA! */
+    :root {
+      --bg-dark: #090D0B;
+      --surface-1: #101613;
+      --surface-2: #16201A;
+      --surface-3: #1C2822;
+      --border-muted: #27362E;
+      --border-glowing: #32493D;
+      
+      --emerald-primary: #00E599;
+      --emerald-bright: #34F5B0;
+      --emerald-dark: #044E36;
+      --emerald-glow: rgba(0, 229, 153, 0.35);
+      --emerald-subtle: rgba(0, 229, 153, 0.12);
+
+      --gold-primary: #FBBF24;
+      --gold-warm: #F59E0B;
+      --gold-dark: #B45309;
+      --gold-glow: rgba(251, 191, 36, 0.3);
+      --gold-subtle: rgba(251, 191, 36, 0.12);
+
+      --ochre-warm: #F97316;
+      --ochre-muted: #EA580C;
+      --ochre-glow: rgba(249, 115, 22, 0.3);
+
+      --text-bright: #F9FAFB;
+      --text-muted: #9CA3AF;
+      --text-subtle: #6B7280;
+
+      --key-num-bg: #141C18;
+      --key-op-bg: #1C2620;
+      --key-fn-bg: #122119;
+    }
+
+    body.light-theme {
+      --bg-dark: #F4F6F4;
+      --surface-1: #EAEEEA;
+      --surface-2: #FFFFFF;
+      --surface-3: #F8FAF8;
+      --border-muted: #D1DBD3;
+      --border-glowing: #A7B8AC;
+
+      --emerald-primary: #047857;
+      --emerald-bright: #059669;
+      --emerald-dark: #D1FAE5;
+      --emerald-glow: rgba(4, 120, 87, 0.25);
+      --emerald-subtle: rgba(4, 120, 87, 0.08);
+
+      --gold-primary: #B45309;
+      --gold-warm: #D97706;
+      --gold-dark: #FEF3C7;
+      --gold-glow: rgba(180, 83, 9, 0.2);
+      --gold-subtle: rgba(180, 83, 9, 0.08);
+
+      --ochre-warm: #C2410C;
+      --ochre-muted: #EA580C;
+      --ochre-glow: rgba(194, 65, 12, 0.2);
+
+      --text-bright: #0E1712;
+      --text-muted: #4B554E;
+      --text-subtle: #78857C;
+
+      --key-num-bg: #FFFFFF;
+      --key-op-bg: #FEF3C7;
+      --key-fn-bg: #E8F7F0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-bright);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Ambient Particle Canvas */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.85;
+    }
+
+    /* App Container */
+    .app-wrapper {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 8px 12px 24px;
+    }
+
+    /* Top Brand Bar */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      background: rgba(16, 22, 19, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 18px;
+      border: 1px solid var(--border-muted);
+      margin-bottom: 10px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--emerald-primary), var(--gold-primary));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px var(--emerald-glow);
+      color: #042014;
+      font-weight: 900;
+      font-size: 20px;
+    }
+
+    .brand-text h1 {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-pro {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: var(--emerald-subtle);
+      border: 1px solid var(--emerald-primary);
+      color: var(--emerald-bright);
+    }
+
+    .brand-text p {
+      font-size: 10px;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      background: var(--surface-1);
+      border: 1px solid var(--border-muted);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-pill:hover, .btn-pill.active {
+      color: var(--emerald-bright);
+      border-color: var(--emerald-primary);
+      background: var(--emerald-subtle);
+      box-shadow: 0 0 12px var(--emerald-glow);
+    }
+
+    .btn-pill.gold:hover, .btn-pill.gold.active {
+      color: var(--gold-primary);
+      border-color: var(--gold-warm);
+      background: var(--gold-subtle);
+      box-shadow: 0 0 12px var(--gold-glow);
+    }
+
+    /* Mode Navigation Tabs */
+    .tab-bar {
+      display: flex;
+      overflow-x: auto;
+      gap: 8px;
+      padding: 6px 4px 10px;
+      scrollbar-width: none;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+
+    .tab-item {
+      white-space: nowrap;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: rgba(16, 22, 19, 0.6);
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.22s ease;
+    }
+
+    .tab-item:hover {
+      color: var(--text-bright);
+      border-color: var(--border-glowing);
+    }
+
+    .tab-item.active {
+      color: var(--emerald-bright);
+      background: var(--surface-2);
+      border-color: var(--emerald-primary);
+      box-shadow: 0 0 14px var(--emerald-glow);
+    }
+
+    /* Screen Views */
+    .screen-view {
+      display: none;
+      animation: fadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .screen-view.active {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Display Card */
+    .display-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border-glowing);
+      border-radius: 22px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 16px var(--emerald-subtle);
+      position: relative;
+    }
+
+    .display-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .status-badges {
+      display: flex;
+      gap: 8px;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+      background: var(--surface-1);
+      border: 1px solid var(--border-muted);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .badge.active {
+      color: var(--emerald-primary);
+      border-color: var(--emerald-primary);
+      box-shadow: 0 0 8px var(--emerald-glow);
+    }
+
+    .badge.gold-active {
+      color: var(--gold-primary);
+      border-color: var(--gold-warm);
+      box-shadow: 0 0 8px var(--gold-glow);
+    }
+
+    .expression-box {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 32px;
+      font-weight: 600;
+      color: var(--text-bright);
+      min-height: 48px;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      direction: ltr;
+    }
+    .expression-box::-webkit-scrollbar { display: none; }
+
+    .caret {
+      display: inline-block;
+      width: 3px;
+      height: 30px;
+      background: var(--emerald-primary);
+      margin-left: 3px;
+      border-radius: 2px;
+      box-shadow: 0 0 8px var(--emerald-primary);
+      animation: blink 1.1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    .preview-box {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--emerald-bright);
+      text-align: right;
+      min-height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+    .preview-box span.eq {
+      color: var(--gold-warm);
+    }
+
+    /* Memory Bar */
+    .memory-bar {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      padding: 4px 6px;
+      margin-bottom: 8px;
+    }
+
+    .mem-btn {
+      flex: 1;
+      padding: 6px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold-warm);
+      background: var(--surface-1);
+      border: 1px solid var(--border-muted);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .mem-btn:hover {
+      background: var(--gold-subtle);
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 8px var(--gold-glow);
+    }
+
+    /* Calculator Keypad Grid */
+    .keypad-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+    }
+
+    .btn-key {
+      height: 54px;
+      border-radius: 16px;
+      font-size: 18px;
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: 1px solid var(--border-muted);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.15s, border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .btn-key:active {
+      transform: scale(0.92);
+    }
+
+    /* Key Variants */
+    .btn-num {
+      background: var(--key-num-bg);
+      color: var(--text-bright);
+    }
+    .btn-num:hover {
+      background: #19241E;
+      border-color: var(--border-glowing);
+      box-shadow: 0 0 10px rgba(0, 229, 153, 0.15);
+    }
+
+    .btn-fn {
+      background: var(--key-fn-bg);
+      color: var(--emerald-bright);
+      font-size: 15px;
+      border-color: rgba(0, 229, 153, 0.25);
+    }
+    .btn-fn:hover {
+      background: rgba(0, 229, 153, 0.15);
+      border-color: var(--emerald-primary);
+      box-shadow: 0 0 12px var(--emerald-glow);
+    }
+
+    .btn-op {
+      background: var(--key-op-bg);
+      color: var(--gold-primary);
+      font-size: 20px;
+      font-weight: 700;
+      border-color: rgba(251, 191, 36, 0.25);
+    }
+    .btn-op:hover {
+      background: rgba(251, 191, 36, 0.15);
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 12px var(--gold-glow);
+    }
+
+    .btn-danger {
+      background: var(--surface-3);
+      color: var(--ochre-warm);
+      border-color: rgba(249, 115, 22, 0.35);
+      font-weight: 700;
+    }
+    .btn-danger:hover {
+      background: rgba(249, 115, 22, 0.18);
+      border-color: var(--ochre-warm);
+      box-shadow: 0 0 14px var(--ochre-glow);
+    }
+
+    .btn-equals {
+      background: var(--emerald-primary);
+      color: #042014;
+      font-size: 26px;
+      font-weight: 800;
+      border-color: var(--emerald-bright);
+      box-shadow: 0 4px 18px var(--emerald-glow);
+    }
+    .btn-equals:hover {
+      background: var(--emerald-bright);
+      box-shadow: 0 6px 24px rgba(0, 229, 153, 0.6);
+    }
+
+    /* Sub-label inside key */
+    .btn-sub {
+      font-size: 9px;
+      color: var(--gold-warm);
+      margin-bottom: -2px;
+      font-weight: 700;
+    }
+
+    /* Graphing Canvas */
+    .graph-container {
+      background: #060A08;
+      border: 1px solid var(--border-glowing);
+      border-radius: 20px;
+      position: relative;
+      height: 380px;
+      overflow: hidden;
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+    }
+
+    #graph-canvas {
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+    }
+
+    .graph-toolbar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+      background: var(--surface-1);
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border-muted);
+    }
+
+    .graph-toolbar input {
+      flex: 1;
+      background: var(--surface-2);
+      border: 1px solid var(--border-muted);
+      border-radius: 10px;
+      padding: 8px 12px;
+      color: var(--emerald-bright);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px;
+      outline: none;
+    }
+    .graph-toolbar input:focus {
+      border-color: var(--emerald-primary);
+      box-shadow: 0 0 10px var(--emerald-glow);
+    }
+
+    .graph-info-overlay {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(16, 22, 19, 0.85);
+      border: 1px solid var(--emerald-primary);
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--emerald-bright);
+      pointer-events: none;
+    }
+
+    .graph-presets {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      margin-top: 8px;
+      padding-bottom: 4px;
+    }
+
+    /* Programmer View */
+    .programmer-bases {
+      background: var(--surface-2);
+      border: 1px solid var(--border-glowing);
+      border-radius: 18px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .base-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .base-row.active {
+      background: var(--emerald-subtle);
+      border: 1px solid var(--emerald-primary);
+    }
+    .base-label {
+      font-weight: 700;
+      color: var(--gold-warm);
+      font-size: 13px;
+      width: 45px;
+    }
+    .base-val {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-bright);
+      text-align: right;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .bit-flipper-grid {
+      display: grid;
+      grid-template-columns: repeat(16, 1fr);
+      gap: 3px;
+      padding: 10px;
+      background: var(--surface-1);
+      border: 1px solid var(--border-muted);
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .bit-cell {
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 4px;
+      background: var(--surface-3);
+      color: var(--text-muted);
+      cursor: pointer;
+      border: 1px solid var(--border-muted);
+      transition: all 0.15s ease;
+    }
+    .bit-cell.set {
+      background: var(--emerald-primary);
+      color: #042014;
+      border-color: var(--emerald-bright);
+      box-shadow: 0 0 6px var(--emerald-glow);
+    }
+
+    /* Matrix & Equation Cards */
+    .card-luxury {
+      background: var(--surface-2);
+      border: 1px solid var(--border-glowing);
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .matrix-input-grid {
+      display: grid;
+      gap: 6px;
+      margin: 8px 0;
+    }
+    .matrix-input-grid.grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .matrix-input-grid.grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+    .matrix-input-grid input, .generic-input {
+      background: var(--surface-1);
+      border: 1px solid var(--border-muted);
+      border-radius: 8px;
+      padding: 8px;
+      text-align: center;
+      color: var(--text-bright);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      outline: none;
+    }
+    .matrix-input-grid input:focus, .generic-input:focus {
+      border-color: var(--emerald-primary);
+      box-shadow: 0 0 8px var(--emerald-glow);
+    }
+
+    /* Sliders */
+    .slider-group {
+      margin: 10px 0;
+    }
+    .slider-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+    input[type=range] {
+      width: 100%;
+      accent-color: var(--emerald-primary);
+      height: 4px;
+      background: var(--border-muted);
+      border-radius: 2px;
+      cursor: pointer;
+    }
+
+    /* Modal / Drawer */
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(4, 7, 5, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+
+    .modal-sheet {
+      width: 100%;
+      max-width: 700px;
+      max-height: 80vh;
+      background: var(--surface-1);
+      border-top: 2px solid var(--emerald-primary);
+      border-radius: 26px 26px 0 0;
+      padding: 20px;
+      overflow-y: auto;
+      box-shadow: 0 -8px 30px rgba(0,0,0,0.8);
+      animation: slideUp 0.24s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .keypad-grid { gap: 6px; }
+      .btn-key { height: 50px; font-size: 16px; border-radius: 12px; }
+      .expression-box { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Ambient Particle Canvas -->
+  <canvas id="particle-canvas"></canvas>
+
+  <div class="app-wrapper">
+    <!-- Header -->
+    <header>
+      <div class="brand-group">
+        <div class="brand-icon">∞</div>
+        <div class="brand-text">
+          <h1>AETHER <span class="badge-pro">PRO</span></h1>
+          <p>Precision Scientific & Analytical Engine</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn-pill" id="btn-sfx-toggle" title="Toggle Sound Feedback">🔊 SFX</button>
+        <button class="btn-pill" id="btn-theme-toggle" title="Toggle Light/Dark Theme">☀️ Light</button>
+        <button class="btn-pill gold" id="btn-constants" title="Physical & Mathematical Constants">⚛ Constants</button>
+        <button class="btn-pill" id="btn-tape" title="Calculation History Tape">🕒 History</button>
+      </div>
+    </header>
+
+    <!-- Mode Selector Tabs -->
+    <nav class="tab-bar">
+      <button class="tab-item active" data-tab="tab-scientific">🔬 Scientific</button>
+      <button class="tab-item" data-tab="tab-graphing">📈 2D Grapher</button>
+      <button class="tab-item" data-tab="tab-programmer">💻 Programmer</button>
+      <button class="tab-item" data-tab="tab-matrix">▦ Matrix & Vector</button>
+      <button class="tab-item" data-tab="tab-solver">⚡ Equation Solver</button>
+      <button class="tab-item" data-tab="tab-units">🔄 Unit Converter</button>
+      <button class="tab-item" data-tab="tab-financial">💰 Financial TVM</button>
+      <button class="tab-item" data-tab="tab-stats">📊 Statistics</button>
+    </nav>
+
+    <!-- 1. SCIENTIFIC CALCULATOR SCREEN -->
+    <section class="screen-view active" id="tab-scientific">
+      <div class="display-card">
+        <div class="display-status-bar">
+          <div class="status-badges">
+            <span class="badge active" id="angle-badge">DEG</span>
+            <span class="badge" id="mode-2nd-badge">2ND</span>
+            <span class="badge" id="mode-hyp-badge">HYP</span>
+            <span class="badge gold-active" id="mem-badge" style="display:none;">M</span>
+          </div>
+          <button class="btn-pill" id="btn-copy-expr" style="padding: 2px 8px; font-size: 11px;">📋 Copy</button>
+        </div>
+        <div class="expression-box" id="calc-expression">
+          <span id="expr-text">0</span><span class="caret"></span>
+        </div>
+        <div class="preview-box" id="calc-preview"></div>
+      </div>
+
+      <!-- Memory Keys -->
+      <div class="memory-bar">
+        <div class="mem-btn" data-mem="MC">MC</div>
+        <div class="mem-btn" data-mem="MR">MR</div>
+        <div class="mem-btn" data-mem="M+">M+</div>
+        <div class="mem-btn" data-mem="M-">M-</div>
+        <div class="mem-btn" data-mem="MS">MS</div>
+      </div>
+
+      <!-- Keypad -->
+      <div class="keypad-grid" id="scientific-keypad">
+        <!-- Row 1 -->
+        <button class="btn-key btn-fn" data-action="toggle-2nd">2nd</button>
+        <button class="btn-key btn-fn" data-action="toggle-hyp">hyp</button>
+        <button class="btn-key btn-fn" data-val="sin(" id="key-sin">sin</button>
+        <button class="btn-key btn-fn" data-val="cos(" id="key-cos">cos</button>
+        <button class="btn-key btn-fn" data-val="tan(" id="key-tan">tan</button>
+
+        <!-- Row 2 -->
+        <button class="btn-key btn-fn" data-val="ln(" id="key-ln">ln</button>
+        <button class="btn-key btn-fn" data-val="log(" id="key-log">log</button>
+        <button class="btn-key btn-fn" data-val="^" id="key-pow">xʸ</button>
+        <button class="btn-key btn-fn" data-val="sqrt(" id="key-sqrt">√</button>
+        <button class="btn-key btn-fn" data-val="!">n!</button>
+
+        <!-- Row 3 -->
+        <button class="btn-key btn-danger" data-action="clear">AC</button>
+        <button class="btn-key btn-danger" data-action="backspace">⌫</button>
+        <button class="btn-key btn-op" data-val="%">%</button>
+        <button class="btn-key btn-fn" data-val="(">(</button>
+        <button class="btn-key btn-fn" data-val=")">)</button>
+
+        <!-- Row 4 -->
+        <button class="btn-key btn-num" data-val="7">7</button>
+        <button class="btn-key btn-num" data-val="8">8</button>
+        <button class="btn-key btn-num" data-val="9">9</button>
+        <button class="btn-key btn-op" data-val="/">÷</button>
+        <button class="btn-key btn-fn" data-val="pi">π</button>
+
+        <!-- Row 5 -->
+        <button class="btn-key btn-num" data-val="4">4</button>
+        <button class="btn-key btn-num" data-val="5">5</button>
+        <button class="btn-key btn-num" data-val="6">6</button>
+        <button class="btn-key btn-op" data-val="*">×</button>
+        <button class="btn-key btn-fn" data-val="e">e</button>
+
+        <!-- Row 6 -->
+        <button class="btn-key btn-num" data-val="1">1</button>
+        <button class="btn-key btn-num" data-val="2">2</button>
+        <button class="btn-key btn-num" data-val="3">3</button>
+        <button class="btn-key btn-op" data-val="-">–</button>
+        <button class="btn-key btn-fn" data-val="phi">φ</button>
+
+        <!-- Row 7 -->
+        <button class="btn-key btn-num" data-val="0">0</button>
+        <button class="btn-key btn-num" data-val=".">.</button>
+        <button class="btn-key btn-fn" data-val="nCr">nCr</button>
+        <button class="btn-key btn-op" data-val="+">+</button>
+        <button class="btn-key btn-equals" data-action="calculate">=</button>
+      </div>
+    </section>
+
+    <!-- 2. GRAPHING CALCULATOR SCREEN -->
+    <section class="screen-view" id="tab-graphing">
+      <div class="graph-toolbar">
+        <span style="color:var(--emerald-bright); font-weight:700;">f(x) =</span>
+        <input type="text" id="graph-input" value="sin(x) * 2" placeholder="e.g. sin(x) + cos(2*x)">
+        <button class="btn-pill" id="btn-plot">Plot</button>
+        <button class="btn-pill gold" id="btn-reset-view">Center</button>
+      </div>
+      <div class="graph-presets">
+        <button class="btn-pill preset-btn" data-fn="sin(x) * 2">sin(x)*2</button>
+        <button class="btn-pill preset-btn" data-fn="cos(x) + sin(2*x)">Wave</button>
+        <button class="btn-pill preset-btn" data-fn="x^3 - 3*x">Cubic</button>
+        <button class="btn-pill preset-btn" data-fn="x^2 - 4">Parabola</button>
+        <button class="btn-pill preset-btn" data-fn="exp(-0.2*x^2) * 3">Gaussian</button>
+      </div>
+      <div class="graph-container">
+        <div class="graph-info-overlay" id="graph-cursor-info">X: 0.000 | Y: 0.000</div>
+        <canvas id="graph-canvas"></canvas>
+      </div>
+    </section>
+
+    <!-- 3. PROGRAMMER CALCULATOR SCREEN -->
+    <section class="screen-view" id="tab-programmer">
+      <div class="programmer-bases">
+        <div class="base-row active" data-base="16">
+          <span class="base-label">HEX</span>
+          <span class="base-val" id="prog-hex">0</span>
+        </div>
+        <div class="base-row" data-base="10">
+          <span class="base-label">DEC</span>
+          <span class="base-val" id="prog-dec">0</span>
+        </div>
+        <div class="base-row" data-base="8">
+          <span class="base-label">OCT</span>
+          <span class="base-val" id="prog-oct">0</span>
+        </div>
+        <div class="base-row" data-base="2">
+          <span class="base-label">BIN</span>
+          <span class="base-val" id="prog-bin" style="font-size:13px;">0000 0000 0000 0000</span>
+        </div>
+      </div>
+
+      <div style="font-size:11px; color:var(--gold-warm); font-weight:700; margin-bottom:6px;">
+        INTERACTIVE 32-BIT FLIPPER (Tap any bit to toggle)
+      </div>
+      <div class="bit-flipper-grid" id="bit-grid"></div>
+
+      <div class="keypad-grid" style="grid-template-columns: repeat(6, 1fr);">
+        <button class="btn-key btn-fn" data-prog-op="AND">AND</button>
+        <button class="btn-key btn-fn" data-prog-op="OR">OR</button>
+        <button class="btn-key btn-fn" data-prog-op="XOR">XOR</button>
+        <button class="btn-key btn-fn" data-prog-op="NOT">NOT</button>
+        <button class="btn-key btn-fn" data-prog-op="LSH">&lt;&lt;</button>
+        <button class="btn-key btn-fn" data-prog-op="RSH">&gt;&gt;</button>
+
+        <button class="btn-key btn-fn" data-prog-digit="A">A</button>
+        <button class="btn-key btn-fn" data-prog-digit="B">B</button>
+        <button class="btn-key btn-num" data-prog-digit="7">7</button>
+        <button class="btn-key btn-num" data-prog-digit="8">8</button>
+        <button class="btn-key btn-num" data-prog-digit="9">9</button>
+        <button class="btn-key btn-danger" id="prog-ac">AC</button>
+
+        <button class="btn-key btn-fn" data-prog-digit="C">C</button>
+        <button class="btn-key btn-fn" data-prog-digit="D">D</button>
+        <button class="btn-key btn-num" data-prog-digit="4">4</button>
+        <button class="btn-key btn-num" data-prog-digit="5">5</button>
+        <button class="btn-key btn-num" data-prog-digit="6">6</button>
+        <button class="btn-key btn-danger" id="prog-del">⌫</button>
+
+        <button class="btn-key btn-fn" data-prog-digit="E">E</button>
+        <button class="btn-key btn-fn" data-prog-digit="F">F</button>
+        <button class="btn-key btn-num" data-prog-digit="1">1</button>
+        <button class="btn-key btn-num" data-prog-digit="2">2</button>
+        <button class="btn-key btn-num" data-prog-digit="3">3</button>
+        <button class="btn-key btn-equals" id="prog-eq">=</button>
+
+        <button class="btn-key btn-num" data-prog-digit="0" style="grid-column: span 6;">0</button>
+      </div>
+    </section>
+
+    <!-- 4. MATRIX & VECTOR SCREEN -->
+    <section class="screen-view" id="tab-matrix">
+      <div class="card-luxury">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h3 style="color:var(--emerald-bright); font-size:15px;">Matrix A (2×2)</h3>
+          <span style="color:var(--gold-warm); font-size:12px;">Square Matrix Engine</span>
+        </div>
+        <div class="matrix-input-grid grid-2" id="mat-a-inputs">
+          <input type="number" value="4" id="m-a00">
+          <input type="number" value="7" id="m-a01">
+          <input type="number" value="2" id="m-a10">
+          <input type="number" value="6" id="m-a11">
+        </div>
+        <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+          <button class="btn-pill" id="mat-btn-det">det(A)</button>
+          <button class="btn-pill" id="mat-btn-inv">A⁻¹ Inverse</button>
+          <button class="btn-pill" id="mat-btn-trans">Aᵀ Transpose</button>
+          <button class="btn-pill" id="mat-btn-trace">tr(A) Trace</button>
+          <button class="btn-pill gold" id="mat-btn-eigen">λ Eigenvalues</button>
+        </div>
+      </div>
+      <div class="card-luxury" id="matrix-result-card" style="border-color:var(--emerald-primary);">
+        <h4 style="color:var(--gold-primary); margin-bottom:6px;">Calculation Result:</h4>
+        <div id="matrix-result-content" style="font-family:'JetBrains Mono', monospace; font-size:16px; color:var(--emerald-bright);">
+          Click any operation above to compute matrix properties
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. EQUATION SOLVER SCREEN -->
+    <section class="screen-view" id="tab-solver">
+      <div class="card-luxury">
+        <h3 style="color:var(--gold-primary); font-size:15px; margin-bottom:10px;">Quadratic Solver: a·x² + b·x + c = 0</h3>
+        <div style="display:flex; gap:10px; margin-bottom:12px;">
+          <input type="number" class="generic-input" id="quad-a" value="1" placeholder="a">
+          <input type="number" class="generic-input" id="quad-b" value="-5" placeholder="b">
+          <input type="number" class="generic-input" id="quad-c" value="6" placeholder="c">
+          <button class="btn-pill" id="btn-solve-quad">Solve</button>
+        </div>
+        <div id="quad-output" style="font-family:'JetBrains Mono', monospace; font-size:15px; color:var(--emerald-bright);"></div>
+      </div>
+
+      <div class="card-luxury">
+        <h3 style="color:var(--emerald-bright); font-size:15px; margin-bottom:10px;">2×2 Linear System (Cramer's Rule)</h3>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">a₁·x + b₁·y = c₁ &nbsp;|&nbsp; a₂·x + b₂·y = c₂</p>
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:8px; margin-bottom:8px;">
+          <input type="number" class="generic-input" id="lin-a1" value="2" placeholder="a₁">
+          <input type="number" class="generic-input" id="lin-b1" value="3" placeholder="b₁">
+          <input type="number" class="generic-input" id="lin-c1" value="8" placeholder="c₁">
+          <input type="number" class="generic-input" id="lin-a2" value="1" placeholder="a₂">
+          <input type="number" class="generic-input" id="lin-b2" value="-1" placeholder="b₂">
+          <input type="number" class="generic-input" id="lin-c2" value="-1" placeholder="c₂">
+        </div>
+        <button class="btn-pill gold" id="btn-solve-linear" style="margin-top:4px;">Solve System</button>
+        <div id="linear-output" style="margin-top:10px; font-family:'JetBrains Mono', monospace; font-size:15px; color:var(--gold-primary);"></div>
+      </div>
+    </section>
+
+    <!-- 6. UNIT CONVERTER SCREEN -->
+    <section class="screen-view" id="tab-units">
+      <div class="card-luxury">
+        <div style="display:flex; gap:8px; overflow-x:auto; margin-bottom:14px; padding-bottom:4px;" id="unit-categories"></div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-bottom:12px;">
+          <div>
+            <label style="font-size:12px; color:var(--emerald-primary);">From:</label>
+            <input type="number" class="generic-input" id="unit-from-val" value="1" style="width:100%; margin-top:4px;">
+            <select class="generic-input" id="unit-from-select" style="width:100%; margin-top:6px; background:var(--surface-3);"></select>
+          </div>
+          <div>
+            <label style="font-size:12px; color:var(--gold-primary);">To:</label>
+            <div id="unit-to-val" style="padding:8px; background:var(--surface-1); border:1px solid var(--gold-warm); border-radius:8px; margin-top:4px; font-family:'JetBrains Mono'; font-weight:700; color:var(--gold-primary); min-height:38px; display:flex; align-items:center;"></div>
+            <select class="generic-input" id="unit-to-select" style="width:100%; margin-top:6px; background:var(--surface-3);"></select>
+          </div>
+        </div>
+      </div>
+      <div class="card-luxury">
+        <h4 style="color:var(--emerald-bright); font-size:13px; margin-bottom:8px;">All Category Equivalents</h4>
+        <div id="unit-breakdown-list" style="font-size:13px;"></div>
+      </div>
+    </section>
+
+    <!-- 7. FINANCIAL TVM SCREEN -->
+    <section class="screen-view" id="tab-financial">
+      <div class="card-luxury">
+        <h3 style="color:var(--emerald-bright); font-size:16px; margin-bottom:12px;">Compound Interest & Wealth Engine</h3>
+        <div class="slider-group">
+          <div class="slider-header">
+            <span style="color:var(--text-muted)">Initial Principal:</span>
+            <span id="fin-p-val" style="color:var(--emerald-bright); font-weight:700;">$10,000</span>
+          </div>
+          <input type="range" id="fin-p" min="0" max="100000" step="500" value="10000">
+        </div>
+        <div class="slider-group">
+          <div class="slider-header">
+            <span style="color:var(--text-muted)">Monthly Contribution:</span>
+            <span id="fin-pmt-val" style="color:var(--gold-primary); font-weight:700;">$200/mo</span>
+          </div>
+          <input type="range" id="fin-pmt" min="0" max="2000" step="25" value="200">
+        </div>
+        <div class="slider-group">
+          <div class="slider-header">
+            <span style="color:var(--text-muted)">Annual Return Rate (%):</span>
+            <span id="fin-r-val" style="color:var(--emerald-bright); font-weight:700;">8.0%</span>
+          </div>
+          <input type="range" id="fin-r" min="1" max="25" step="0.5" value="8">
+        </div>
+        <div class="slider-group">
+          <div class="slider-header">
+            <span style="color:var(--text-muted)">Investment Horizon (Years):</span>
+            <span id="fin-t-val" style="color:var(--gold-primary); font-weight:700;">10 Years</span>
+          </div>
+          <input type="range" id="fin-t" min="1" max="40" step="1" value="10">
+        </div>
+      </div>
+      <div class="card-luxury" style="text-align:center; border-color:var(--emerald-primary);">
+        <p style="font-size:12px; color:var(--text-muted); letter-spacing:1px; font-weight:700;">PROJECTED FUTURE BALANCE</p>
+        <h2 id="fin-total-fv" style="font-size:36px; color:var(--emerald-bright); margin:8px 0; font-family:'JetBrains Mono';">$47,389</h2>
+        <div style="display:flex; justify-content:space-around; margin-top:14px; font-size:14px;">
+          <div><span style="color:var(--text-muted);">Deposited:</span> <strong id="fin-total-dep" style="color:var(--gold-warm);">$34,000</strong></div>
+          <div><span style="color:var(--text-muted);">Compound Gain:</span> <strong id="fin-total-gain" style="color:var(--emerald-primary);">$13,389</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. STATISTICS SCREEN -->
+    <section class="screen-view" id="tab-stats">
+      <div class="card-luxury">
+        <label style="font-size:13px; color:var(--gold-primary); font-weight:700;">Dataset (comma or space separated):</label>
+        <textarea id="stats-input" class="generic-input" rows="2" style="width:100%; margin-top:6px; text-align:left;">12, 15, 18, 22, 22, 28, 30, 35, 42, 50</textarea>
+      </div>
+      <div class="card-luxury" style="border-color:var(--emerald-primary);">
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; font-family:'JetBrains Mono';">
+          <div><span style="color:var(--text-muted); font-size:11px;">Count (n):</span><br><strong id="st-n" style="color:var(--gold-primary); font-size:16px;">10</strong></div>
+          <div><span style="color:var(--text-muted); font-size:11px;">Mean (μ):</span><br><strong id="st-mean" style="color:var(--emerald-bright); font-size:16px;">27.4</strong></div>
+          <div><span style="color:var(--text-muted); font-size:11px;">Median:</span><br><strong id="st-med" style="color:var(--emerald-primary); font-size:16px;">25.0</strong></div>
+          <div><span style="color:var(--text-muted); font-size:11px;">Std Dev (σ):</span><br><strong id="st-std" style="color:var(--gold-warm); font-size:16px;">11.36</strong></div>
+          <div><span style="color:var(--text-muted); font-size:11px;">Variance (σ²):</span><br><strong id="st-var" style="color:var(--text-bright); font-size:16px;">129.0</strong></div>
+          <div><span style="color:var(--text-muted); font-size:11px;">IQR (Q3-Q1):</span><br><strong id="st-iqr" style="color:var(--emerald-bright); font-size:16px;">15.0</strong></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Constants Modal -->
+  <div class="modal-backdrop" id="modal-constants">
+    <div class="modal-sheet">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3 style="color:var(--gold-primary); font-size:16px;">⚛ Physical & Mathematical Constants</h3>
+        <button class="btn-pill" id="close-constants">✕ Close</button>
+      </div>
+      <div id="constants-list"></div>
+    </div>
+  </div>
+
+  <!-- History Modal -->
+  <div class="modal-backdrop" id="modal-tape">
+    <div class="modal-sheet">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3 style="color:var(--emerald-bright); font-size:16px;">🕒 Calculation Tape</h3>
+        <div>
+          <button class="btn-pill" id="clear-tape-btn" style="color:var(--ochre-warm);">Clear All</button>
+          <button class="btn-pill" id="close-tape">✕ Close</button>
+        </div>
+      </div>
+      <div id="history-items-container"></div>
+    </div>
+  </div>
+
+  <script>
+    /* Audio Synthesis for Luxury Haptic Keypress Feedback */
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let isSfxMuted = false;
+    function playClickSound(freq = 480, type = 'sine') {
+      if (isSfxMuted) return;
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(freq * 0.5, audioCtx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.04);
+      } catch (e) {}
+    }
+
+    /* Ambient Particle Canvas */
+    const pCanvas = document.getElementById('particle-canvas');
+    const pCtx = pCanvas.getContext('2d');
+    let pWidth, pHeight;
+    const particles = [];
+    const glyphs = ['∫', '∑', 'π', '√', 'e', 'φ', 'Δ', 'λ', '∞', 'θ', 'µ', 'ƒ', 'Ω'];
+
+    function resizeCanvas() {
+      pWidth = pCanvas.width = window.innerWidth;
+      pHeight = pCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    for (let i = 0; i < 28; i++) {
+      particles.push({
+        x: Math.random() * pWidth,
+        y: Math.random() * pHeight,
+        size: 14 + Math.random() * 22,
+        speed: 0.2 + Math.random() * 0.5,
+        drift: (Math.random() - 0.5) * 0.4,
+        glyph: glyphs[Math.floor(Math.random() * glyphs.length)],
+        opacity: 0.04 + Math.random() * 0.12,
+        isEmerald: Math.random() > 0.5
+      });
+    }
+
+    function animateParticles() {
+      pCtx.clearRect(0, 0, pWidth, pHeight);
+      for (const p of particles) {
+        p.y -= p.speed;
+        p.x += p.drift;
+        if (p.y < -30) { p.y = pHeight + 20; p.x = Math.random() * pWidth; }
+        if (p.x < -30) p.x = pWidth + 20;
+        if (p.x > pWidth + 30) p.x = -20;
+
+        pCtx.font = `${p.size}px serif`;
+        const isLight = document.body.classList.contains('light-theme');
+        pCtx.fillStyle = p.isEmerald 
+          ? (isLight ? `rgba(4, 120, 87, ${p.opacity * 0.7})` : `rgba(0, 229, 153, ${p.opacity})`) 
+          : (isLight ? `rgba(180, 83, 9, ${p.opacity * 0.7})` : `rgba(251, 191, 36, ${p.opacity})`);
+        pCtx.fillText(p.glyph, p.x, p.y);
+      }
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    /* Tab Switching */
+    const tabs = document.querySelectorAll('.tab-item');
+    const views = document.querySelectorAll('.screen-view');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        playClickSound(600);
+        tabs.forEach(t => t.classList.remove('active'));
+        views.forEach(v => v.classList.remove('active'));
+        tab.classList.add('active');
+        const target = document.getElementById(tab.dataset.tab);
+        if (target) target.classList.add('active');
+        if (tab.dataset.tab === 'tab-graphing') renderGraph();
+      });
+    });
+
+    /* Scientific Calculator Logic */
+    let currentExpr = '';
+    let isDegree = true;
+    let is2nd = false;
+    let isHyp = false;
+    let memoryVal = null;
+    const historyList = [];
+
+    const exprTextEl = document.getElementById('expr-text');
+    const previewEl = document.getElementById('calc-preview');
+    const angleBadge = document.getElementById('angle-badge');
+    const badge2nd = document.getElementById('mode-2nd-badge');
+    const badgeHyp = document.getElementById('mode-hyp-badge');
+    const memBadge = document.getElementById('mem-badge');
+
+    angleBadge.addEventListener('click', () => {
+      isDegree = !isDegree;
+      angleBadge.textContent = isDegree ? 'DEG' : 'RAD';
+      updatePreview();
+    });
+
+    function sanitizeMath(exp) {
+      let s = exp;
+      s = s.replace(/pi/g, Math.PI.toString());
+      s = s.replace(/phi/g, '1.618033988749895');
+      s = s.replace(/(?<![a-zA-Z])e(?![a-zA-Z0-9])/g, Math.E.toString());
+      s = s.replace(/×/g, '*').replace(/÷/g, '/');
+
+      // Functions
+      if (isDegree) {
+        s = s.replace(/sin\(([^)]+)\)/g, 'Math.sin(($1) * Math.PI / 180)');
+        s = s.replace(/cos\(([^)]+)\)/g, 'Math.cos(($1) * Math.PI / 180)');
+        s = s.replace(/tan\(([^)]+)\)/g, 'Math.tan(($1) * Math.PI / 180)');
+      } else {
+        s = s.replace(/sin\(/g, 'Math.sin(');
+        s = s.replace(/cos\(/g, 'Math.cos(');
+        s = s.replace(/tan\(/g, 'Math.tan(');
+      }
+      s = s.replace(/sqrt\(/g, 'Math.sqrt(');
+      s = s.replace(/log\(/g, 'Math.log10(');
+      s = s.replace(/ln\(/g, 'Math.log(');
+      s = s.replace(/\^/g, '**');
+
+      // Factorial
+      s = s.replace(/(\d+)!/g, (m, n) => {
+        let res = 1;
+        for (let i = 2; i <= parseInt(n); i++) res *= i;
+        return res;
+      });
+
+      return s;
+    }
+
+    function evaluateExpression(exp) {
+      if (!exp || !exp.trim()) return 0;
+      try {
+        const clean = sanitizeMath(exp);
+        const res = Function(`"use strict"; return (${clean})`)();
+        if (Number.isFinite(res)) {
+          return parseFloat(res.toPrecision(10));
+        }
+        return 'Error';
+      } catch (e) {
+        return 'Error';
+      }
+    }
+
+    function updatePreview() {
+      if (!currentExpr) {
+        exprTextEl.textContent = '0';
+        previewEl.innerHTML = '';
+        return;
+      }
+      exprTextEl.textContent = currentExpr;
+      const res = evaluateExpression(currentExpr);
+      if (res !== 'Error') {
+        previewEl.innerHTML = `<span class="eq">=</span> ${res}`;
+      } else {
+        previewEl.innerHTML = '';
+      }
+    }
+
+    document.querySelectorAll('#scientific-keypad button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        playClickSound(520);
+        const val = btn.dataset.val;
+        const act = btn.dataset.action;
+
+        if (act === 'clear') {
+          currentExpr = '';
+          updatePreview();
+        } else if (act === 'backspace') {
+          currentExpr = currentExpr.slice(0, -1);
+          updatePreview();
+        } else if (act === 'calculate') {
+          if (!currentExpr) return;
+          const res = evaluateExpression(currentExpr);
+          if (res !== 'Error') {
+            historyList.unshift({ expr: currentExpr, res, time: new Date().toLocaleTimeString() });
+            currentExpr = res.toString();
+            updatePreview();
+          }
+        } else if (act === 'toggle-2nd') {
+          is2nd = !is2nd;
+          badge2nd.classList.toggle('active', is2nd);
+          document.getElementById('key-pow').textContent = is2nd ? '∛x' : 'xʸ';
+          document.getElementById('key-sqrt').textContent = is2nd ? 'x²' : '√';
+        } else if (act === 'toggle-hyp') {
+          isHyp = !isHyp;
+          badgeHyp.classList.toggle('active', isHyp);
+        } else if (val) {
+          currentExpr += val;
+          updatePreview();
+        }
+      });
+    });
+
+    // Memory Keys
+    document.querySelectorAll('.mem-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        playClickSound(640);
+        const mem = btn.dataset.mem;
+        const curr = evaluateExpression(currentExpr);
+        if (mem === 'MC') {
+          memoryVal = null;
+          memBadge.style.display = 'none';
+        } else if (mem === 'MR') {
+          if (memoryVal !== null) {
+            currentExpr += memoryVal.toString();
+            updatePreview();
+          }
+        } else if (mem === 'MS') {
+          if (typeof curr === 'number') {
+            memoryVal = curr;
+            memBadge.style.display = 'inline-block';
+          }
+        } else if (mem === 'M+') {
+          if (typeof curr === 'number') {
+            memoryVal = (memoryVal || 0) + curr;
+            memBadge.style.display = 'inline-block';
+          }
+        } else if (mem === 'M-') {
+          if (typeof curr === 'number') {
+            memoryVal = (memoryVal || 0) - curr;
+            memBadge.style.display = 'inline-block';
+          }
+        }
+      });
+    });
+
+    // Copy Expression
+    document.getElementById('btn-copy-expr').addEventListener('click', () => {
+      const copyVal = previewEl.textContent ? previewEl.textContent.replace('= ', '') : exprTextEl.textContent;
+      navigator.clipboard.writeText(copyVal);
+      document.getElementById('btn-copy-expr').textContent = '✓ Copied';
+      setTimeout(() => document.getElementById('btn-copy-expr').textContent = '📋 Copy', 1500);
+    });
+
+    /* 2. Interactive Graphing Engine */
+    const gCanvas = document.getElementById('graph-canvas');
+    const gCtx = gCanvas.getContext('2d');
+    const gInput = document.getElementById('graph-input');
+    const gInfo = document.getElementById('graph-cursor-info');
+
+    let gXMin = -6, gXMax = 6, gYMin = -4, gYMax = 4;
+    let isPanning = false, panStartX = 0, panStartY = 0;
+
+    function resizeGraph() {
+      gCanvas.width = gCanvas.parentElement.clientWidth;
+      gCanvas.height = gCanvas.parentElement.clientHeight;
+      renderGraph();
+    }
+    window.addEventListener('resize', resizeGraph);
+
+    function renderGraph() {
+      if (!gCanvas.width) return;
+      const w = gCanvas.width, h = gCanvas.height;
+      gCtx.clearRect(0, 0, w, h);
+
+      const isLight = document.body.classList.contains('light-theme');
+
+      // Grid
+      gCtx.strokeStyle = isLight ? '#D1DBD3' : '#15241B';
+      gCtx.lineWidth = 1;
+      const xStep = (gXMax - gXMin) / 10;
+      for (let x = Math.floor(gXMin); x <= gXMax; x += 1) {
+        const sx = ((x - gXMin) / (gXMax - gXMin)) * w;
+        gCtx.beginPath(); gCtx.moveTo(sx, 0); gCtx.lineTo(sx, h); gCtx.stroke();
+      }
+      for (let y = Math.floor(gYMin); y <= gYMax; y += 1) {
+        const sy = h - ((y - gYMin) / (gYMax - gYMin)) * h;
+        gCtx.beginPath(); gCtx.moveTo(0, sy); gCtx.lineTo(w, sy); gCtx.stroke();
+      }
+
+      // Main Axes (Gold Warm)
+      gCtx.strokeStyle = isLight ? 'rgba(180, 83, 9, 0.8)' : 'rgba(251, 191, 36, 0.7)';
+      gCtx.lineWidth = 1.6;
+      const originX = ((0 - gXMin) / (gXMax - gXMin)) * w;
+      const originY = h - ((0 - gYMin) / (gYMax - gYMin)) * h;
+      if (originX >= 0 && originX <= w) {
+        gCtx.beginPath(); gCtx.moveTo(originX, 0); gCtx.lineTo(originX, h); gCtx.stroke();
+      }
+      if (originY >= 0 && originY <= h) {
+        gCtx.beginPath(); gCtx.moveTo(0, originY); gCtx.lineTo(w, originY); gCtx.stroke();
+      }
+
+      // Function Curve (Emerald)
+      try {
+        const fnRaw = gInput.value;
+        const fnBody = fnRaw.replace(/\^/g, '**')
+          .replace(/sin/g, 'Math.sin')
+          .replace(/cos/g, 'Math.cos')
+          .replace(/tan/g, 'Math.tan')
+          .replace(/exp/g, 'Math.exp')
+          .replace(/sqrt/g, 'Math.sqrt');
+        const compiled = new Function('x', `try { return (${fnBody}); } catch(e){ return NaN; }`);
+
+        gCtx.strokeStyle = '#00E599';
+        gCtx.lineWidth = 2.6;
+        gCtx.shadowColor = 'rgba(0, 229, 153, 0.6)';
+        gCtx.shadowBlur = 10;
+        gCtx.beginPath();
+
+        let first = true;
+        for (let px = 0; px <= w; px += 2) {
+          const x = gXMin + (px / w) * (gXMax - gXMin);
+          const y = compiled(x);
+          if (!isNaN(y) && isFinite(y)) {
+            const py = h - ((y - gYMin) / (gYMax - gYMin)) * h;
+            if (first) { gCtx.moveTo(px, py); first = false; }
+            else { gCtx.lineTo(px, py); }
+          } else {
+            first = true;
+          }
+        }
+        gCtx.stroke();
+        gCtx.shadowBlur = 0;
+      } catch (e) {}
+    }
+
+    gCanvas.addEventListener('mousemove', (e) => {
+      const rect = gCanvas.getBoundingClientRect();
+      const px = e.clientX - rect.left;
+      const py = e.clientY - rect.top;
+      const x = gXMin + (px / gCanvas.width) * (gXMax - gXMin);
+      const y = gYMin + ((gCanvas.height - py) / gCanvas.height) * (gYMax - gYMin);
+      gInfo.textContent = `X: ${x.toFixed(3)} | Y: ${y.toFixed(3)}`;
+    });
+
+    document.getElementById('btn-plot').addEventListener('click', renderGraph);
+    document.getElementById('btn-reset-view').addEventListener('click', () => {
+      gXMin = -6; gXMax = 6; gYMin = -4; gYMax = 4;
+      renderGraph();
+    });
+    document.querySelectorAll('.preset-btn').forEach(b => {
+      b.addEventListener('click', () => {
+        gInput.value = b.dataset.fn;
+        renderGraph();
+      });
+    });
+
+    /* 3. Programmer Logic */
+    let progVal = 42;
+    let progOp = null, progStored = null;
+    const progHex = document.getElementById('prog-hex');
+    const progDec = document.getElementById('prog-dec');
+    const progOct = document.getElementById('prog-oct');
+    const progBin = document.getElementById('prog-bin');
+    const bitGrid = document.getElementById('bit-grid');
+
+    function updateProgView() {
+      progHex.textContent = (progVal >>> 0).toString(16).toUpperCase();
+      progDec.textContent = (progVal >>> 0).toString(10);
+      progOct.textContent = (progVal >>> 0).toString(8);
+      let bStr = (progVal >>> 0).toString(2).padStart(32, '0');
+      progBin.textContent = bStr.match(/.{1,4}/g).join(' ');
+
+      // Bit grid
+      bitGrid.innerHTML = '';
+      for (let i = 31; i >= 0; i--) {
+        const isSet = ((progVal >>> i) & 1) === 1;
+        const cell = document.createElement('div');
+        cell.className = `bit-cell ${isSet ? 'set' : ''}`;
+        cell.textContent = isSet ? '1' : '0';
+        cell.addEventListener('click', () => {
+          progVal = progVal ^ (1 << i);
+          updateProgView();
+        });
+        bitGrid.appendChild(cell);
+      }
+    }
+    updateProgView();
+
+    document.querySelectorAll('[data-prog-digit]').forEach(b => {
+      b.addEventListener('click', () => {
+        playClickSound(580);
+        const d = parseInt(b.dataset.progDigit, 16);
+        progVal = ((progVal * 16) + d) >>> 0;
+        updateProgView();
+      });
+    });
+    document.getElementById('prog-ac').addEventListener('click', () => { progVal = 0; updateProgView(); });
+    document.getElementById('prog-del').addEventListener('click', () => { progVal = Math.floor(progVal / 16); updateProgView(); });
+
+    /* 4. Matrix Engine */
+    document.getElementById('mat-btn-det').addEventListener('click', () => {
+      const a = +document.getElementById('m-a00').value, b = +document.getElementById('m-a01').value;
+      const c = +document.getElementById('m-a10').value, d = +document.getElementById('m-a11').value;
+      const det = a * d - b * c;
+      document.getElementById('matrix-result-content').innerHTML = `Determinant <strong>det(A) = ${det}</strong>`;
+    });
+    document.getElementById('mat-btn-trace').addEventListener('click', () => {
+      const a = +document.getElementById('m-a00').value, d = +document.getElementById('m-a11').value;
+      document.getElementById('matrix-result-content').innerHTML = `Trace <strong>tr(A) = ${a + d}</strong>`;
+    });
+    document.getElementById('mat-btn-inv').addEventListener('click', () => {
+      const a = +document.getElementById('m-a00').value, b = +document.getElementById('m-a01').value;
+      const c = +document.getElementById('m-a10').value, d = +document.getElementById('m-a11').value;
+      const det = a * d - b * c;
+      if (det === 0) {
+        document.getElementById('matrix-result-content').textContent = 'Singular Matrix (det = 0, no inverse)';
+      } else {
+        document.getElementById('matrix-result-content').innerHTML = `Inverse A⁻¹ = <br>[ ${(d/det).toFixed(3)}, ${(-b/det).toFixed(3)} ]<br>[ ${(-c/det).toFixed(3)}, ${(a/det).toFixed(3)} ]`;
+      }
+    });
+
+    /* 5. Quadratic Solver */
+    function solveQuad() {
+      const a = +document.getElementById('quad-a').value;
+      const b = +document.getElementById('quad-b').value;
+      const c = +document.getElementById('quad-c').value;
+      const d = b * b - 4 * a * c;
+      const out = document.getElementById('quad-output');
+      if (d > 0) {
+        const r1 = (-b + Math.sqrt(d)) / (2 * a);
+        const r2 = (-b - Math.sqrt(d)) / (2 * a);
+        out.innerHTML = `Two Real Roots: <strong>x₁ = ${r1.toFixed(4)}, x₂ = ${r2.toFixed(4)}</strong> (Δ = ${d})`;
+      } else if (d === 0) {
+        out.innerHTML = `One Repeated Root: <strong>x = ${(-b / (2 * a)).toFixed(4)}</strong> (Δ = 0)`;
+      } else {
+        const re = (-b / (2 * a)).toFixed(3);
+        const im = (Math.sqrt(-d) / (2 * Math.abs(a))).toFixed(3);
+        out.innerHTML = `Complex Conjugate: <strong>${re} ± ${im}i</strong> (Δ = ${d})`;
+      }
+    }
+    document.getElementById('btn-solve-quad').addEventListener('click', solveQuad);
+    solveQuad();
+
+    /* 6. Financial TVM */
+    function updateFinance() {
+      const P = +document.getElementById('fin-p').value;
+      const pmt = +document.getElementById('fin-pmt').value;
+      const r = (+document.getElementById('fin-r').value) / 100 / 12;
+      const t = (+document.getElementById('fin-t').value) * 12;
+
+      document.getElementById('fin-p-val').textContent = `$${P.toLocaleString()}`;
+      document.getElementById('fin-pmt-val').textContent = `$${pmt}/mo`;
+      document.getElementById('fin-r-val').textContent = `${(r*1200).toFixed(1)}%`;
+      document.getElementById('fin-t-val').textContent = `${t/12} Years`;
+
+      let bal = P, dep = P;
+      for (let m = 0; m < t; m++) {
+        bal += pmt; dep += pmt;
+        bal += bal * r;
+      }
+      document.getElementById('fin-total-fv').textContent = `$${Math.round(bal).toLocaleString()}`;
+      document.getElementById('fin-total-dep').textContent = `$${Math.round(dep).toLocaleString()}`;
+      document.getElementById('fin-total-gain').textContent = `$${Math.round(bal - dep).toLocaleString()}`;
+    }
+    ['fin-p', 'fin-pmt', 'fin-r', 'fin-t'].forEach(id => {
+      document.getElementById(id).addEventListener('input', updateFinance);
+    });
+    updateFinance();
+
+    /* 7. Statistics */
+    function updateStats() {
+      const raw = document.getElementById('stats-input').value.split(/[,\s]+/).map(Number).filter(n => !isNaN(n));
+      if (!raw.length) return;
+      raw.sort((a,b) => a - b);
+      const n = raw.length;
+      const sum = raw.reduce((a,b) => a + b, 0);
+      const mean = sum / n;
+      const med = n % 2 === 1 ? raw[Math.floor(n/2)] : (raw[n/2 - 1] + raw[n/2]) / 2;
+      const variance = raw.map(x => Math.pow(x - mean, 2)).reduce((a,b) => a+b, 0) / n;
+      const std = Math.sqrt(variance);
+
+      document.getElementById('st-n').textContent = n;
+      document.getElementById('st-mean').textContent = mean.toFixed(2);
+      document.getElementById('st-med').textContent = med.toFixed(2);
+      document.getElementById('st-var').textContent = variance.toFixed(2);
+      document.getElementById('st-std').textContent = std.toFixed(2);
+    }
+    document.getElementById('stats-input').addEventListener('input', updateStats);
+    updateStats();
+
+    /* Modals (Constants & History) */
+    const constants = [
+      { sym: 'π', name: 'Archimedes Pi', val: '3.1415926535' },
+      { sym: 'e', name: "Euler's Number", val: '2.7182818284' },
+      { sym: 'φ', name: 'Golden Ratio', val: '1.6180339887' },
+      { sym: 'c', name: 'Speed of Light', val: '299,792,458 m/s' },
+      { sym: 'h', name: 'Planck Constant', val: '6.62607015 × 10⁻³⁴ J·s' },
+      { sym: 'G', name: 'Gravitational Constant', val: '6.67430 × 10⁻¹¹ m³/kg/s²' },
+      { sym: 'N_A', name: 'Avogadro Number', val: '6.02214076 × 10²³ mol⁻¹' },
+      { sym: 'k_B', name: 'Boltzmann Constant', val: '1.380649 × 10⁻²³ J/K' }
+    ];
+    const cList = document.getElementById('constants-list');
+    constants.forEach(c => {
+      const item = document.createElement('div');
+      item.style.cssText = 'display:flex; justify-content:space-between; padding:8px; border-bottom:1px solid var(--border-muted); cursor:pointer;';
+      item.innerHTML = `<span style="color:var(--gold-primary); font-weight:700;">${c.sym} (${c.name})</span><span style="font-family:monospace; color:var(--emerald-bright);">${c.val}</span>`;
+      item.addEventListener('click', () => {
+        currentExpr += c.sym === 'π' ? 'pi' : (c.sym === 'e' ? 'e' : (c.sym === 'φ' ? 'phi' : c.sym));
+        updatePreview();
+        document.getElementById('modal-constants').classList.remove('open');
+      });
+      cList.appendChild(item);
+    });
+
+    /* SFX Sound Toggle */
+    const sfxBtn = document.getElementById('btn-sfx-toggle');
+    sfxBtn.addEventListener('click', () => {
+      isSfxMuted = !isSfxMuted;
+      sfxBtn.innerHTML = isSfxMuted ? '🔇 Muted' : '🔊 SFX';
+      sfxBtn.classList.toggle('active', !isSfxMuted);
+      if (!isSfxMuted) playClickSound(520, 'sine');
+    });
+
+    /* Theme Control Toggle (Dark <-> Light) */
+    const themeToggleBtn = document.getElementById('btn-theme-toggle');
+    themeToggleBtn.addEventListener('click', () => {
+      playClickSound(580, 'sine');
+      const isLight = document.body.classList.toggle('light-theme');
+      themeToggleBtn.innerHTML = isLight ? '🌙 Dark' : '☀️ Light';
+      themeToggleBtn.classList.toggle('active', isLight);
+      // Re-render graph if active
+      if (document.getElementById('tab-graphing').classList.contains('active')) {
+        renderGraph();
+      }
+    });
+
+    document.getElementById('btn-constants').addEventListener('click', () => document.getElementById('modal-constants').classList.add('open'));
+    document.getElementById('close-constants').addEventListener('click', () => document.getElementById('modal-constants').classList.remove('open'));
+    document.getElementById('btn-tape').addEventListener('click', () => {
+      const hContainer = document.getElementById('history-items-container');
+      hContainer.innerHTML = historyList.length ? '' : '<p style="color:var(--text-muted);">No history recorded yet.</p>';
+      historyList.forEach(h => {
+        const row = document.createElement('div');
+        row.style.cssText = 'padding:8px 0; border-bottom:1px solid var(--border-muted);';
+        row.innerHTML = `<div style="font-size:11px; color:var(--text-muted);">${h.time}</div><div style="font-family:monospace; color:var(--gold-warm);">${h.expr} = <strong>${h.res}</strong></div>`;
+        hContainer.appendChild(row);
+      });
+      document.getElementById('modal-tape').classList.add('open');
+    });
+    document.getElementById('close-tape').addEventListener('click', () => document.getElementById('modal-tape').classList.remove('open'));
+    document.getElementById('clear-tape-btn').addEventListener('click', () => {
+      historyList.length = 0;
+      document.getElementById('history-items-container').innerHTML = '<p style="color:var(--text-muted);">Tape cleared.</p>';
+    });
+
+    /* Keyboard Shortcuts */
+    window.addEventListener('keydown', (e) => {
+      if (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') return;
+      if (e.key >= '0' && e.key <= '9') { currentExpr += e.key; updatePreview(); }
+      else if (['+', '-', '*', '/', '(', ')', '^', '%', '.'].includes(e.key)) { currentExpr += e.key; updatePreview(); }
+      else if (e.key === 'Enter') { document.querySelector('[data-action="calculate"]').click(); }
+      else if (e.key === 'Backspace') { currentExpr = currentExpr.slice(0, -1); updatePreview(); }
+      else if (e.key.toLowerCase() === 'c') { currentExpr = ''; updatePreview(); }
+    });
+  </script>
+</body>
+</html>
+

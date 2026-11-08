@@ -1,0 +1,6 @@
+# Template for Play Store Release Signing Credentials
+storePassword=your_keystore_password
+keyPassword=your_key_password
+keyAlias=upload
+storeFile=../upload-keystore.jks
+

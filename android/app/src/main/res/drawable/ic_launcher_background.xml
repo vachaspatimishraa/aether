@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Obsidian Carbon Deep Luxury Background -->
+    <path
+        android:fillColor="#090D0B"
+        android:pathData="M0,0h108v108h-108z"/>
+
+    <!-- Subtle Cyber Emerald Analytical Grid Accent (No Blue, No Red, No Magenta) -->
+    <path
+        android:strokeColor="#1A00E599"
+        android:strokeWidth="0.8"
+        android:pathData="M18,0v108 M36,0v108 M54,0v108 M72,0v108 M90,0v108 M0,18h108 M0,36h108 M0,54h108 M0,72h108 M0,90h108"/>
+
+    <!-- Subtle Emerald Precision Ring -->
+    <path
+        android:strokeColor="#3300E599"
+        android:strokeWidth="1.2"
+        android:pathData="M54,18 A36,36 0 1,1 53.9,18 Z"/>
+</vector>
+
